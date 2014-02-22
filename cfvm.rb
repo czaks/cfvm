@@ -119,7 +119,7 @@ class CFVM
         @stack << r
       end
     end
-    [:-, :/, :%, :<, :>, :<=, :>=].each do |i|
+    [:-, :/, :%, :<, :>, :<=, :>=, :>>, :<<].each do |i|
       @env[i] = -> do
         d = @stack.pop
 	r = @stack.pop.send(i, d)
