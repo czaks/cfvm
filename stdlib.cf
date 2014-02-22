@@ -68,7 +68,7 @@
   ] defun
 
 :each_iter               [                    list | code | accum -> lca      ] pop
-  [ 2 dupn                                                       [ | lcas     ] pop
+  [ 2 dupn                                                       [ | lcal     ] pop
     empty !                                                      [ | lca?     ] pop
     [ 2 swapn                                                    [ | acl      ] pop
       ->                                                         [ | acLn     ] pop
