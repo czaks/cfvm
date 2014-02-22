@@ -1,0 +1,91 @@
+:stdlib [ This is a standard library of CF language ] pop
+[ The libraries loaded ] pop (
+[ For popup2 use inside stdlib ] pop (
+[ For popup  use inside stdlib ] pop (
+
+:defun
+  [ swap def ] swap def
+:exit
+  [ ) ] defun
+:empty
+  [ nil == ] defun
+:nil
+  [ ( ) ] defun
+:pp
+  [ p pop ] defun
+:->
+  [ enter popup exit swap ] defun
+:<-
+  [ enter popdown exit ] defun
+:swapnn
+  [ popup swapn popdown swapn ] defun
+:dupn
+  [ dup popup swapn dup popdown 1 + 1 swapnn ] defun
+:die [ Execute an incorrect operation ] pop
+  [ nil ~ ] defun 
+:popup2
+  [ popup exit swap popup enter ] defun
+:popdown2
+  [ exit popdown swap enter popdown ] defun
+
+:times                   [              code | max                -> cm       ] pop
+  [ nil                  [ Push a null stack (accumulator)         | cma      ] pop
+    0                    [ Push iteration (0)                      | cmai     ] pop
+    times_iter           [ Run iterator                            | cmAI     ] pop
+    pop                  [ Cleanup                                 | cmA      ] pop
+    swap                                                         [ | cAm      ] pop
+    pop                                                          [ | cA       ] pop
+    swap                                                         [ | Ac       ] pop
+    pop                                                          [ | A        ] pop
+  ] defun
+:times_iter              [              code | max | accum | iter -> cmai     ] pop
+  [ dup                  [ Duplicate current iteration             | cmaii    ] pop 
+    3 dupn               [ Duplicate max iteration                 | cmaiim   ] pop
+    <                    [ Compare them                            | cmair    ] pop
+    [ dup                [ Duplicate current iteration             | cmaii    ] pop
+      4 dupn             [ Duplicate code                          | cmaiic   ] pop
+      swap               [ Swap them, so that code gets on top     | cmaici   ] pop
+      (                  [ Begin a new stack                       | -        ] pop
+        popdown popdown  [ Get current iter and code onto a stack  | ic       ] pop
+        exec             [ Execute code                            | ***      ] pop
+      )                                                          [ | cmais    ] pop 
+      swap               [ Swap the stack and the iteration        | cmasi    ] pop
+      1 +                [ i++                                     | cmasI    ] pop
+      swap               [ Get them back in order                  | cmaIs    ] pop
+      2 dupn             [ Copy accumulator                        | cmaIsa   ] pop
+      +                  [ Add to a stack                          | cmaIA    ] pop
+      2 swapn            [ Swap with an accumulator                | cmAIa    ] pop
+      pop                [ Remove old accumulator                  | cmAI     ] pop
+      times_iter         [ Rinse and repeat                        | -------- ] pop
+    ] if
+  ] defun
+
+:each                    [                     list | code        -> lc       ] pop
+  [ nil                  [                                         | lca      ] pop
+    each_iter                                                    [ | LcA      ] pop
+    swap pop                                                     [ | LA       ] pop
+    swap pop                                                     [ | A        ] pop
+  ] defun
+
+:each_iter               [                    list | code | accum -> lca      ] pop
+  [ 2 dupn                                                       [ | lcas     ] pop
+    empty !                                                      [ | lca?     ] pop
+    [ 2 swapn                                                    [ | acl      ] pop
+      ->                                                         [ | acLn     ] pop
+      2 dupn                                                     [ | acLnc    ] pop
+      swap                                                       [ | acLcn    ] pop
+      (                                                          [ | -        ] pop
+        popdown popdown                                          [ | nc       ] pop
+        exec                                                     [ | ***      ] pop
+      )                                                          [ | acLs     ] pop
+      3 dupn                                                     [ | acLsa    ] pop
+      +                                                          [ | acLA     ] pop
+      3 swapn                                                    [ | AcLa     ] pop
+      pop                                                        [ | AcL      ] pop
+      2 swapn                                                    [ | LcA      ] pop
+      each_iter                                                  [ | -------- ] pop
+    ] if 
+  ] defun
+
+:reverse
+  [ [ ] each ] defun

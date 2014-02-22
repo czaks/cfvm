@@ -1,0 +1,13 @@
+#!./cf.rb
+
+[
+[
+  ( 1 2 3 4 5 ) reverse [ p nl pp ] each
+  7
+]
+5 times
+]
+5 times
+pp
+
+
